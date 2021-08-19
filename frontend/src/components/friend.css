@@ -1,0 +1,14 @@
+.card {
+  margin: 5px;
+  padding: 10px 20px;
+  background-color: #eee;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.card-subtitle {
+  font-size: 1rem;
+}
