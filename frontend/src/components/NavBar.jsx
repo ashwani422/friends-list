@@ -9,11 +9,11 @@ export default function NavBar() {
         <Container maxWidth="lg">
           <Toolbar disableGutters>
             <DnsIcon />
-            <Typography variant='h6' style={{margin: '0 10px'}}>
+            <Typography variant='h6' style={{margin: '0 10px', flexGrow: 1}}>
               My Friends
             </Typography>
-            <Button variant="outlined" color="inherit" size="small" elevation={0} href="/" style={{margin: '0 5px'}}>Home</Button>
-            <Button variant="outlined" color="inherit" size="small" elevation={0} href="/add" style={{margin: '0 5px'}}>New Friend</Button>
+            <Button variant='outlined' color="inherit" elevation={0} href="/" >Home</Button>
+            <Button variant='outlined' color="inherit" elevation={0} href="/add" >New Friend</Button>
           </Toolbar>
         </Container>
       </AppBar>

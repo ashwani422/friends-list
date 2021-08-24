@@ -11,6 +11,17 @@ export const getFriends = async (req, res) => {
   }
 }
 
+export const getOneFriends = async (req, res) => {
+  try {
+    const friends = await Friend.find({_id: req.params.id})
+    // console.log(friends)
+    res.status(200).json(friends)
+  } catch (err) {
+    console.log(err.message)
+    res.json({ message: err.message })
+  }
+}
+
 
 export const postFriend = async (req, res) => {
   try {
