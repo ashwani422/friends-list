@@ -7,6 +7,7 @@ import PersonIcon from '@material-ui/icons/Person'
 import DeleteIcon from '@material-ui/icons/Delete'
 import EditIcon from '@material-ui/icons/Edit'
 import Tooltip from '@material-ui/core/Tooltip'
+import { useHistory } from 'react-router-dom'
 
 import useStyles from './HomePageStyles'
 import { deleteFriend, getFriends } from '../services/api'
@@ -15,6 +16,7 @@ import { deleteFriend, getFriends } from '../services/api'
 export default function HomePage() {
 
   const classes = useStyles()
+  const history = useHistory()
 
   const [friends, setFriends] = useState([])
 
@@ -27,7 +29,7 @@ export default function HomePage() {
       }
       setFriends(data)
     } catch (e) {
-      console.log(e.message)
+      console.error(e.message)
     }
   }
 
@@ -35,7 +37,7 @@ export default function HomePage() {
     getAllFriends()
   }, [])
 
-  const handleClick = async (id) => {
+  const handleDelete = async (id) => {
     try {
       // const {data} = await deleteFriend(id)
       // console.log(data)
@@ -45,7 +47,20 @@ export default function HomePage() {
       const newFriendList = friends.filter(friend => friend._id !== id)
       setFriends(newFriendList)
     } catch (e) {
-      console.log(e.message)
+      console.error(e.message)
+    }
+  }
+
+  const handleEdit = async (id) => {
+    try {
+      const { data } = await getFriends(id)
+      
+      history.push({
+        pathname: '/add',
+        state: data[0]
+      })
+    } catch (e) {
+      console.error(e.message)
     }
   }
 
@@ -67,7 +82,7 @@ export default function HomePage() {
                 subheader={`Age: ${friend.age}`}
                 action={
                   <Tooltip title="Delete" placement='top' arrow>
-                    <IconButton color='secondary' onClick={() => handleClick(friend._id)}>
+                    <IconButton color='secondary' onClick={() => handleDelete(friend._id)}>
                       <DeleteIcon />
                     </IconButton>
                   </Tooltip>
@@ -79,7 +94,7 @@ export default function HomePage() {
               </CardContent>
               <CardActions>
                 <Tooltip title="Edit" placement='top' arrow>
-                  <IconButton  color='inherit'>
+                  <IconButton  color='inherit' onClick={() => handleEdit(friend._id)}>
                     <EditIcon />
                   </IconButton>
                 </Tooltip>

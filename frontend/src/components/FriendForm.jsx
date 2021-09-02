@@ -1,37 +1,40 @@
-import React, {useState} from 'react'
-import { Button, Container, makeStyles, TextField } from '@material-ui/core'
+import React, { useState, useRef } from 'react'
+import { Button, Container, TextField } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
 
-import { postFriend } from '../services/api'
+import useStyles from './FriendFormStyles'
+import { postFriend, updateFriend } from '../services/api'
 
-const useStyles = makeStyles(theme => {
-  return ({
-    toolbar: theme.mixins.toolbar,
-    formContainer: {
-      marginTop: theme.spacing(5)
-    },
-    form: {
-      display: 'flex',
-      flexDirection: 'column'
-    },
-    formField: {
-      marginTop: '10px'
-    }
-  })
-})
 
 export default function FriendForm() {
-  
+
   const classes = useStyles()
   const history = useHistory()
+
+  let name = '',
+    age = '',
+    description = ''
+
+  const isUpdate = useRef(false)
+  // isUpdate.current = false
+  
+  if (history.location.state) {
+    isUpdate.current = true
+
+    name = history.location.state.name
+    age = history.location.state.age
+    description = history.location.state.description
+  }
+
   const [friend, setFriend] = useState({
-    name: '',
-    age: '',
-    description: ''
+    name: name,
+    age: age,
+    description: description
   })
 
+  
   const handleChange = e => {
-    const {name, value} = e.target
+    const { name, value } = e.target
 
     setFriend(previousFriend => {
       return {
@@ -41,17 +44,29 @@ export default function FriendForm() {
     })
   }
 
-  const handleSubmit = async e => {
+  const handleAdd = async e => {
     e.preventDefault()
-    
-    try {
-      const {data} = await postFriend(friend)
-      console.log(data)
-    } catch (e) {
-      console.log(e.message)
-    }
-    history.push('/')
 
+    try {
+      const { data } = await postFriend(friend)
+      console.log(data)
+      history.push('/')
+    } catch (e) {
+      console.error(e.message)
+    }
+
+  }
+
+  const handleUpdate = async (e, id) => {
+    e.preventDefault()
+    try {
+      const {data} = await updateFriend(id, friend)
+      console.log(data)
+      history.location.state = ''
+      history.push('/')
+    } catch (e) {
+      console.error(e.message)      
+    }
   }
 
   return (
@@ -59,10 +74,10 @@ export default function FriendForm() {
       <div className={classes.toolbar}></div>
       <Container maxWidth="xs" className={classes.formContainer}>
         <form className={classes.form} noValidate autoComplete="off">
-          <TextField className={classes.formField} variant="outlined" label="Name" name="name" onChange={handleChange} />
-          <TextField className={classes.formField} variant="outlined" type="number" label="Age" name="age" onChange={handleChange} />
-          <TextField className={classes.formField} variant="outlined" label="Describe your friend" name="description" multiline rows={2} onChange={handleChange} />
-          <Button className={classes.formField} variant="contained" color='primary' onClick={handleSubmit}>Add</Button>
+          <TextField className={classes.formField} variant="outlined" label="Name" name="name" value={friend.name} onChange={handleChange} />
+          <TextField className={classes.formField} variant="outlined" type="number" label="Age" name="age" value={friend.age} onChange={handleChange} />
+          <TextField className={classes.formField} variant="outlined" label="Describe your friend" name="description" value={friend.description} multiline rows={2} onChange={handleChange} />
+          <Button className={classes.formField} variant="contained" color='primary' onClick={isUpdate.current ? (e) => handleUpdate(e, history.location.state._id) : handleAdd}>{isUpdate.current ? 'Update' : 'Add'}</Button>
         </form>
       </Container>
     </div>
