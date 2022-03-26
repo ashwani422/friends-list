@@ -22,6 +22,8 @@ export default function HomePage() {
 
   const getAllFriends = async () => {
     try {
+      // const result = await getFriends()
+      // console.log(result)
       const { data } = await getFriends()
       if (!data.length) {
         console.log('No friend found')
@@ -53,6 +55,7 @@ export default function HomePage() {
 
   const handleEdit = async (id) => {
     try {
+      // console.log(id)
       const { data } = await getFriends(id)
       
       history.push({

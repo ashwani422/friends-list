@@ -4,16 +4,16 @@ import {
   Switch,
   Route
 } from "react-router-dom"
-// import { ThemeProvider } from '@material-ui/styles'
+import { ThemeProvider } from '@material-ui/styles'
 
-// import theme from './AppStyle'
+import theme from './AppStyle'
 import NavBar from './components/NavBar'
 import HomePage from './pages/HomePage'
 import FriendForm from './components/FriendForm'
 
 export default function App() {
   return (
-    // <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
       <Router>
         <NavBar />
         <Switch>
@@ -25,6 +25,6 @@ export default function App() {
           </Route>
         </Switch>
       </Router>
-    // </ThemeProvider>
+    </ThemeProvider>
   )
 }
